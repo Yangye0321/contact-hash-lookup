@@ -1,4 +1,5 @@
 #include<iostream>
+#include<fstream>
 //#include"Functions.h"
 using namespace std;
 struct HashNode     //哈希表中的节点
@@ -68,16 +69,14 @@ void InsertHash(Buckets* con,HashNode data)  //插入哈希表
 {
     int h=BKDRHash(&data.name[0]);
     HashNode* p=con[h].head;
-    int t=1;
     while(p->next!=NULL)
     {
-        t++;
         p=p->next;
     }
     HashNode* s=new HashNode;
     s->name=data.name;
     s->pn=data.pn;
-    s->st=t;
+    s->st=p->st+1;
     s->next=NULL;
     p->next=s;
 }
@@ -122,6 +121,48 @@ void DeleteHash(Buckets* con,string name)  //删除哈希表中的节点
     }
     cout<<"Not found!"<<endl;
 }
+void ReadData(Buckets* con)  //从文件中读取数据
+{
+    	fstream file;
+		file.open("contact.txt",ios::in);
+        int n;
+		file>>n;
+		HashNode* data=new HashNode[n];
+		for(int i=0;i<n;i++)
+		{
+			file>>data[i].name>>data[i].pn;
+			data[i].st=0;
+		}
+		file.close();
+        CreateHash(con,data,n);
+}
+
+void WriteData(Buckets* con)  //将数据写入文件
+{
+    fstream file;
+    file.open("contact.txt",ios::out);
+    int count=0;
+    for(int i=0;i<Maxsize;i++)
+    {
+        HashNode* p=con[i].head->next;
+        while(p!=NULL)
+        {
+            count++;
+            p=p->next;
+        }
+    }
+    file<<count<<endl;
+    for(int i=0;i<Maxsize;i++)
+    {
+        HashNode* p=con[i].head->next;
+        while(p!=NULL)
+        {
+            file<<p->name<<" "<<p->pn<<endl;
+            p=p->next;
+        }
+    }
+    file.close();
+}
 int main()
 {
     Buckets* contacts = new Buckets[Maxsize];
@@ -129,15 +170,17 @@ int main()
     {
         contacts[i].head=new HashNode;
         contacts[i].head->next=NULL;
+        contacts[i].head->st=0;
     }
-    int n=3;
-    HashNode data[3]={{"张三","1"},{"李四","2"},{"王五","3"}};
-    CreateHash(contacts,data,n);
-    //TraverseHash(contacts);
+    int n;
+    ReadData(contacts);
+    // HashNode data[3]={{"张三","1"},{"李四","2"},{"王五","3"}};
+    TraverseHash(contacts);
     SearchHash(contacts,"张三");
     DeleteHash(contacts,"张三");
     SearchHash(contacts,"张三");
     InsertHash(contacts,{"赵六","4"});
     SearchHash(contacts,"赵六");
+    WriteData(contacts);
     return 0;
 }
