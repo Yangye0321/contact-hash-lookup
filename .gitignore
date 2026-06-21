@@ -1,0 +1,46 @@
+# 编译产物
+*.obj
+*.o
+*.exe
+*.out
+*.a
+*.so
+*.dll
+*.pdb
+*.ilk
+
+# 可执行文件
+main
+hash_table
+test
+
+# 数据文件（重要！）
+
+*.dat
+*.bin
+data/
+
+# IDE配置
+.vscode/
+.idea/
+.vs/
+*.code-workspace
+
+# 构建目录
+build/
+Debug/
+Release/
+cmake-build-debug/
+cmake-build-release/
+
+# 临时文件
+*.log
+*.tmp
+*.swp
+*.swo
+*~
+.DS_Store
+
+# 备份文件
+*.bak
+*.backup
