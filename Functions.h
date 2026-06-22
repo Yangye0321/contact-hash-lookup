@@ -29,6 +29,7 @@ class Functions
     void visit1(HashNode p);
     void visit2(HashNode p,int& count);
     void visit3(HashNode p,int& total);
+    void SortHash(Buckets* con);  //排序哈希表
     void CountASL(Buckets* con);  //计算平均搜索长度
     void ClearHash(Buckets* con);  //清空哈希表
 };

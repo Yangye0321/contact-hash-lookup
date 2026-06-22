@@ -18,7 +18,7 @@ unsigned int Functions::BKDRHash(char* str) //BKDRHashº¯Êý
 }
 void Functions::visit1(HashNode p)    //Êä³öÐÅÏ¢
 {
-    cout<<left<<setw(10)<<p.number<<setw(10)<<p.name<<setw(15)<<p.pn<<setw(10)<<p.st<<endl;
+    cout<<left<<setw(10)<<p.number<<setw(10)<<p.name<<setw(15)<<p.pn<<setw(30)<<p.addr<<setw(10)<<p.st<<endl;
 }
 void Functions::visit2(HashNode p,int& count)    //Í³¼Æ½ÚµãÊý
 {
@@ -27,6 +27,20 @@ void Functions::visit2(HashNode p,int& count)    //Í³¼Æ½ÚµãÊý
 void Functions::visit3(HashNode p,int& total)     //Í³¼ÆËÑË÷³¤¶È
 {
     total+=p.st;
+}
+void Functions::SortHash(Buckets* con)
+{
+    int num=0;
+    HashNode* p;
+    for(int i=0;i<Maxsize;i++)
+    {
+        p=con[i].head->next;
+        while(p!=NULL)
+        {
+            p->number=++num;
+            p=p->next;
+        }
+    }
 }
 int Functions::TraverseHash(Buckets* con,int choice)  //±éÀú¹þÏ£±í
 {
@@ -67,20 +81,12 @@ void Functions::CreateHash(Buckets* con,HashNode data[],int n,int choice)  //´´½
         HashNode* s=new HashNode;
         s->name=data[i].name;
         s->pn=data[i].pn;
+        s->addr=data[i].addr;
         s->st=p->st+1;
         s->next=NULL;
         p->next=s;
     }
-    int num=0;
-    for(int i=0;i<Maxsize;i++)
-    {
-        p=con[i].head->next;
-        while(p!=NULL)
-        {
-            p->number=++num;
-            p=p->next;
-        }
-    }
+    SortHash(con);
 }
 
 void Functions::InsertHash(Buckets* con,HashNode data)  //²åÈë¹þÏ£±í
@@ -94,9 +100,11 @@ void Functions::InsertHash(Buckets* con,HashNode data)  //²åÈë¹þÏ£±í
     HashNode* s=new HashNode;
     s->name=data.name;
     s->pn=data.pn;
+    s->addr=data.addr;
     s->st=p->st+1;
     s->next=NULL;
     p->next=s;
+    SortHash(con);
 }
 
 void Functions::SearchHash(Buckets* con,string key,int choice)  //ËÑË÷¹þÏ£±í
@@ -138,6 +146,7 @@ void Functions::DeleteHash(Buckets* con,string name)  //É¾³ý¹þÏ£±íÖÐµÄ½Úµã
             delete q;
             cout<<"Deleted!"<<endl;
             flag=true;
+            SortHash(con);
             return;
         }
         p=p->next;
@@ -153,7 +162,7 @@ void Functions::ReadData(Buckets* con,int choice)  //´ÓÎÄ¼þÖÐ¶ÁÈ¡Êý¾Ý
 		HashNode* data=new HashNode[n];
 		for(int i=0;i<n;i++)
 		{
-			file>>data[i].name>>data[i].pn;
+			file>>data[i].name>>data[i].pn>>data[i].addr;
 			data[i].st=0;
 		}
 		file.close();
@@ -181,7 +190,7 @@ void Functions::WriteData(Buckets* con)  //½«Êý¾ÝÐ´ÈëÎÄ¼þ
         HashNode* p=con[i].head->next;
         while(p!=NULL)
         {
-            file<<p->name<<" "<<p->pn<<endl;
+            file<<p->name<<" "<<p->pn<<" "<<p->addr<<endl;
             p=p->next;
         }
     }
@@ -193,10 +202,9 @@ void Functions::CountASL(Buckets* con)  //¼ÆËãÆ½¾ùËÑË÷³¤¶È
     int total=TraverseHash(con,3);
     int num=TraverseHash(con,2);
     if(num==0)
-        cout<<"No contacts!"<<endl;
+        cout<<"Í¨Ñ¶Â¼Îª¿Õ£¡"<<endl;
     else
-        cout<<"Average Search Length: "<<(double)total/num<<endl;
-    cout<<total<<" "<<num<<endl;
+        cout<<(double)total/num<<endl;
 }
 
 void Functions::ClearHash(Buckets* con)  //Çå¿Õ¹þÏ£±í

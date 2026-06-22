@@ -38,7 +38,7 @@ int main()
         }
         f.ReadData(contacts,choice_sw);
         cout<<"请输入要执行的功能号：1.查询 2.添加 3.删除 4.显示所有联系人 5.计算平均搜索长度 6.更改查询方式 7.退出"<<endl;
-        string name,pn;
+        string name,pn,addr;
         int choice;
         while(off && cin>>choice)
         {
@@ -59,19 +59,29 @@ int main()
                     }
                     break;
                 case 2:
-                    cout<<"请输入要添加的姓名和电话号码："<<endl;
-                    cin>>name>>pn;
-                    f.InsertHash(contacts,{name,pn});
+                    cout<<"请输入要添加的姓名、电话号码和地址："<<endl;
+                    cin>>name>>pn>>addr;
+                    f.InsertHash(contacts,{name,pn,addr});
                     break;
                 case 3:
-                    cout<<"请输入要删除的姓名："<<endl;
-                    cin>>name;
-                    f.DeleteHash(contacts,name);
+                    if(choice_sw==1)
+                    {
+                        cout<<"请输入要删除联系人的姓名："<<endl;
+                        cin>>name;
+                        f.DeleteHash(contacts,name);
+                    }
+                    else if(choice_sw==2)
+                    {
+                        cout<<"请输入要删除联系人的电话号码："<<endl;
+                        cin>>pn;
+                        f.DeleteHash(contacts,pn);
+                    }
+
                     break;
                 case 4:
                     cout<<"显示所有联系人："<<endl;
-                    cout << left << setw(10) << "序号" << setw(10) << "姓名" << setw(15) << "电话号码" << setw(10) << "查找次数" << endl;
-                    cout << "----------------------------------------" << endl;
+                    cout << left << setw(10) << "序号" << setw(10) << "姓名" << setw(15) << "电话号码" << setw(30) << "地址" << setw(10) << "查找次数" << endl;
+                    cout << "----------------------------------------------------------------------------" << endl;
                     f.TraverseHash(contacts,1);
                     break;
                 case 5:
