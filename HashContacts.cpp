@@ -19,15 +19,6 @@ int main()
     int choice_sw;
     cout<<"请输入哈希查询方式：1.按姓名 2.按电话号码"<<endl;
 
-    // HashNode data[3]={{"张三","1"},{"李四","2"},{"王五","3"}};
-    // f.TraverseHash(contacts);
-    // f.SearchHash(contacts,"张三");
-    // f.DeleteHash(contacts,"张三");
-    // f.SearchHash(contacts,"张三");
-    // f.InsertHash(contacts,{"赵六","4"});
-    // f.SearchHash(contacts,"赵六");
-
-    ////待新增用户交互功能
     bool off=true;
     while(cin>>choice_sw)
     {

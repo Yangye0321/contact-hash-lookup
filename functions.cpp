@@ -125,9 +125,30 @@ void Functions::SearchHash(Buckets* con,string key,int choice)  //ËÑË÷¹þÏ£±í
         }
         p=p->next;
     }
-    cout<<"Not found!"<<endl;
+    FuzzySearch(con,key,choice);
 }
 
+void Functions::FuzzySearch(Buckets* con,string key,int choice)  //Ä£ºýËÑË÷¹þÏ£±í
+{
+    int h=BKDRHash(&key[0]);
+    HashNode* p=con[h].head->next;
+    bool found=false;
+    for(int i=0;i<Maxsize;i++)
+    {
+        p=con[i].head->next;
+        while(p!=NULL)
+        {
+            if((p->name.find(key)!=string::npos&&choice==1)||(p->pn.find(key)!=string::npos&&choice==2))
+            {
+                visit1(*p);
+                found=true;
+            }
+            p=p->next;
+        }
+    }
+    if(!found)
+        cout<<"Not found!"<<endl;
+}
 void Functions::DeleteHash(Buckets* con,string name)  //É¾³ý¹þÏ£±íÖÐµÄ½Úµã
 {
     int h=BKDRHash(&name[0]);
