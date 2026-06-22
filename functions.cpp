@@ -1,5 +1,6 @@
 #include<iostream>
 #include<fstream>
+#include<iomanip>
 #include"Functions.h"
 using namespace std;
 #define Maxsize 53
@@ -17,7 +18,7 @@ unsigned int Functions::BKDRHash(char* str) //BKDRHash函数
 }
 void Functions::visit1(HashNode p)    //输出信息
 {
-    cout<<p.st<<" "<<p.name<<" "<<p.pn<<" "<<endl;
+    cout<<left<<setw(10)<<p.number<<setw(10)<<p.name<<setw(15)<<p.pn<<setw(10)<<p.st<<endl;
 }
 void Functions::visit2(HashNode p,int& count)    //统计节点数
 {
@@ -48,13 +49,16 @@ int Functions::TraverseHash(Buckets* con,int choice)  //遍历哈希表
     return num;
 }
 
-void Functions::CreateHash(Buckets* con,HashNode data[],int n)  //创建哈希表
+void Functions::CreateHash(Buckets* con,HashNode data[],int n,int choice)  //创建哈希表
 {
     int h;
     HashNode* p;
     for(int i=0;i<n;i++)
     {
-        h=BKDRHash(&data[i].name[0]);
+        if(choice==1)
+            h=BKDRHash(&data[i].name[0]);
+        else if(choice==2)
+            h=BKDRHash(&data[i].pn[0]);
         p=con[h].head;
         while(p->next!=NULL)
         {
@@ -66,6 +70,16 @@ void Functions::CreateHash(Buckets* con,HashNode data[],int n)  //创建哈希表
         s->st=p->st+1;
         s->next=NULL;
         p->next=s;
+    }
+    int num=0;
+    for(int i=0;i<Maxsize;i++)
+    {
+        p=con[i].head->next;
+        while(p!=NULL)
+        {
+            p->number=++num;
+            p=p->next;
+        }
     }
 }
 
@@ -85,13 +99,18 @@ void Functions::InsertHash(Buckets* con,HashNode data)  //插入哈希表
     p->next=s;
 }
 
-void Functions::SearchHash(Buckets* con,string name)  //搜索哈希表
+void Functions::SearchHash(Buckets* con,string key,int choice)  //搜索哈希表
 {
-    int h=BKDRHash(&name[0]);
+    int h=BKDRHash(&key[0]);
     HashNode* p=con[h].head->next;
     while(p!=NULL)
     {
-        if(p->name==name)
+        if(p->name==key&&choice==1)
+        {
+            visit1(*p);
+            return;
+        }
+        else if(p->pn==key&&choice==2)
         {
             visit1(*p);
             return;
@@ -125,7 +144,7 @@ void Functions::DeleteHash(Buckets* con,string name)  //删除哈希表中的节点
     }
     cout<<"Not found!"<<endl;
 }
-void Functions::ReadData(Buckets* con)  //从文件中读取数据
+void Functions::ReadData(Buckets* con,int choice)  //从文件中读取数据
 {
     	fstream file;
 		file.open("contact.txt",ios::in);
@@ -138,7 +157,8 @@ void Functions::ReadData(Buckets* con)  //从文件中读取数据
 			data[i].st=0;
 		}
 		file.close();
-        CreateHash(con,data,n);
+        CreateHash(con,data,n,choice);
+        delete[] data;
 }
 
 void Functions::WriteData(Buckets* con)  //将数据写入文件
@@ -177,4 +197,20 @@ void Functions::CountASL(Buckets* con)  //计算平均搜索长度
     else
         cout<<"Average Search Length: "<<(double)total/num<<endl;
     cout<<total<<" "<<num<<endl;
+}
+
+void Functions::ClearHash(Buckets* con)  //清空哈希表
+{
+    for(int i=0;i<Maxsize;i++)
+    {
+        HashNode* p=con[i].head->next;
+        while(p!=NULL)
+        {
+            HashNode* q=p;
+            p=p->next;
+            delete q;
+        }
+        con[i].head->next=NULL;
+        con[i].head->st=0;
+    }
 }
