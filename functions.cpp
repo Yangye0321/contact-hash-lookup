@@ -2,7 +2,7 @@
 #include<fstream>
 #include"Functions.h"
 using namespace std;
-#define Maxsize 40
+#define Maxsize 53
 unsigned int Functions::BKDRHash(char* str) //BKDRHash函数 
 {
     unsigned int seed=131;
@@ -15,39 +15,55 @@ unsigned int Functions::BKDRHash(char* str) //BKDRHash函数
     
     return hash%Maxsize;
 }
-
-void Functions::TraverseHash(Buckets* con)  //遍历哈希表
+void Functions::visit1(HashNode p)    //输出信息
+{
+    cout<<p.st<<" "<<p.name<<" "<<p.pn<<" "<<endl;
+}
+void Functions::visit2(HashNode p,int& count)    //统计节点数
+{
+    count++;
+}
+void Functions::visit3(HashNode p,int& total)     //统计搜索长度
+{
+    total+=p.st;
+}
+int Functions::TraverseHash(Buckets* con,int choice)  //遍历哈希表
 {
     HashNode* p;
+    int num=0;
     for(int i=0;i<Maxsize;i++)
     {
         p=con[i].head->next;
         while(p!=NULL)
         {
-            cout<<p->st<<" "<<p->name<<" "<<p->pn<<" "<<endl;
+            if(choice==1)
+                visit1(*p);
+            else if(choice==2)
+                visit2(*p,num);
+            else if(choice==3)
+                visit3(*p,num);
             p=p->next;
         }
     }
+    return num;
 }
 
 void Functions::CreateHash(Buckets* con,HashNode data[],int n)  //创建哈希表
 {
     int h;
     HashNode* p;
-    int t=1;
     for(int i=0;i<n;i++)
     {
         h=BKDRHash(&data[i].name[0]);
         p=con[h].head;
         while(p->next!=NULL)
         {
-            t++;
             p=p->next;
         }
         HashNode* s=new HashNode;
         s->name=data[i].name;
         s->pn=data[i].pn;
-        s->st=t;
+        s->st=p->st+1;
         s->next=NULL;
         p->next=s;
     }
@@ -77,7 +93,7 @@ void Functions::SearchHash(Buckets* con,string name)  //搜索哈希表
     {
         if(p->name==name)
         {
-            cout<<p->st<<" "<<p->name<<" "<<p->pn<<" "<<endl;
+            visit1(*p);
             return;
         }
         p=p->next;
@@ -150,4 +166,15 @@ void Functions::WriteData(Buckets* con)  //将数据写入文件
         }
     }
     file.close();
+}
+
+void Functions::CountASL(Buckets* con)  //计算平均搜索长度
+{
+    int total=TraverseHash(con,3);
+    int num=TraverseHash(con,2);
+    if(num==0)
+        cout<<"No contacts!"<<endl;
+    else
+        cout<<"Average Search Length: "<<(double)total/num<<endl;
+    cout<<total<<" "<<num<<endl;
 }
