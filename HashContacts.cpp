@@ -59,15 +59,14 @@ int main()
                     {
                         cout<<"请输入要删除联系人的姓名："<<endl;
                         cin>>name;
-                        f.DeleteHash(contacts,name);
+                        f.DeleteHash(contacts,name,1);
                     }
                     else if(choice_sw==2)
                     {
                         cout<<"请输入要删除联系人的电话号码："<<endl;
                         cin>>pn;
-                        f.DeleteHash(contacts,pn);
+                        f.DeleteHash(contacts,pn,2);
                     }
-
                     break;
                 case 4:
                     cout<<"显示所有联系人："<<endl;

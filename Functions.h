@@ -24,7 +24,7 @@ class Functions
     void InsertHash(Buckets* con,HashNode data);  //插入哈希表
     void SearchHash(Buckets* con,string key,int choice);  //查找哈希表
     void FuzzySearch(Buckets* con,string key,int choice);  //模糊查找哈希表
-    void DeleteHash(Buckets* con,string name);  //删除哈希表中的节点
+    void DeleteHash(Buckets* con,string key,int choice);  //删除哈希表中的节点
     void ReadData(Buckets* con,int choice);  //从文件中读取数据
     void WriteData(Buckets* con);  //将数据写入文件
     void visit1(HashNode p);

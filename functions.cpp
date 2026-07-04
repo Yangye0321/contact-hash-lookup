@@ -62,7 +62,6 @@ int Functions::TraverseHash(Buckets* con,int choice)  //±éÀú¹şÏ£±í
     }
     return num;
 }
-
 void Functions::CreateHash(Buckets* con,HashNode data[],int n,int choice)  //´´½¨¹şÏ£±í
 {
     int h;
@@ -88,7 +87,6 @@ void Functions::CreateHash(Buckets* con,HashNode data[],int n,int choice)  //´´½
     }
     SortHash(con);
 }
-
 void Functions::InsertHash(Buckets* con,HashNode data)  //²åÈë¹şÏ£±í
 {
     int h=BKDRHash(&data.name[0]);
@@ -106,7 +104,6 @@ void Functions::InsertHash(Buckets* con,HashNode data)  //²åÈë¹şÏ£±í
     p->next=s;
     SortHash(con);
 }
-
 void Functions::SearchHash(Buckets* con,string key,int choice)  //ËÑË÷¹şÏ£±í
 {
     int h=BKDRHash(&key[0]);
@@ -127,7 +124,6 @@ void Functions::SearchHash(Buckets* con,string key,int choice)  //ËÑË÷¹şÏ£±í
     }
     FuzzySearch(con,key,choice);
 }
-
 void Functions::FuzzySearch(Buckets* con,string key,int choice)  //Ä£ºıËÑË÷¹şÏ£±í
 {
     int h=BKDRHash(&key[0]);
@@ -149,9 +145,9 @@ void Functions::FuzzySearch(Buckets* con,string key,int choice)  //Ä£ºıËÑË÷¹şÏ£±
     if(!found)
         cout<<"Not found!"<<endl;
 }
-void Functions::DeleteHash(Buckets* con,string name)  //É¾³ı¹şÏ£±íÖĞµÄ½Úµã
+void Functions::DeleteHash(Buckets* con,string key,int choice)  //É¾³ı¹şÏ£±íÖĞµÄ½Úµã
 {
-    int h=BKDRHash(&name[0]);
+    int h=BKDRHash(&key[0]);
     HashNode* p=con[h].head;
     bool flag=false;
     while(p->next!=NULL)
@@ -160,7 +156,17 @@ void Functions::DeleteHash(Buckets* con,string name)  //É¾³ı¹şÏ£±íÖĞµÄ½Úµã
         {
             p->st--;
         }
-        if(p->next->name==name)
+        if(p->next->name==key&&choice==1)
+        {
+            HashNode* q=p->next;
+            p->next=q->next;
+            delete q;
+            cout<<"Deleted!"<<endl;
+            flag=true;
+            SortHash(con);
+            return;
+        }
+        else if(p->next->pn==key&&choice==2)
         {
             HashNode* q=p->next;
             p->next=q->next;
@@ -190,7 +196,6 @@ void Functions::ReadData(Buckets* con,int choice)  //´ÓÎÄ¼şÖĞ¶ÁÈ¡Êı¾İ
         CreateHash(con,data,n,choice);
         delete[] data;
 }
-
 void Functions::WriteData(Buckets* con)  //½«Êı¾İĞ´ÈëÎÄ¼ş
 {
     fstream file;
@@ -217,7 +222,6 @@ void Functions::WriteData(Buckets* con)  //½«Êı¾İĞ´ÈëÎÄ¼ş
     }
     file.close();
 }
-
 void Functions::CountASL(Buckets* con)  //¼ÆËãÆ½¾ùËÑË÷³¤¶È
 {
     int total=TraverseHash(con,3);
@@ -227,7 +231,6 @@ void Functions::CountASL(Buckets* con)  //¼ÆËãÆ½¾ùËÑË÷³¤¶È
     else
         cout<<(double)total/num<<endl;
 }
-
 void Functions::ClearHash(Buckets* con)  //Çå¿Õ¹şÏ£±í
 {
     for(int i=0;i<Maxsize;i++)
