@@ -1,4 +1,4 @@
-# 编译产物
+# C/C++ 编译产物
 *.obj
 *.o
 *.exe
@@ -8,23 +8,25 @@
 *.dll
 *.pdb
 *.ilk
+*.idb
+*.tlog
 
-# 可执行文件
+# 常见的无扩展名构建产物
 main
 hash_table
 test
 
-# 数据文件（重要！）
-
+# 临时或测试数据文件
 *.dat
 *.bin
 data/
 
-# IDE配置
-.vscode/
+# IDE 和本地用户配置
 .idea/
 .vs/
 *.code-workspace
+# .vscode/tasks.json 等项目级配置应提交；仅忽略其中的个人配置。
+.vscode/*.local.json
 
 # 构建目录
 build/
@@ -33,7 +35,7 @@ Release/
 cmake-build-debug/
 cmake-build-release/
 
-# 临时文件
+# 日志和临时文件
 *.log
 *.tmp
 *.swp
@@ -44,3 +46,4 @@ cmake-build-release/
 # 备份文件
 *.bak
 *.backup
+*.orig
